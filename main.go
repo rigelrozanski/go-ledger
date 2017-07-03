@@ -11,7 +11,7 @@ import (
 var htmlStr = `
 <html>
   <body>
-    <script src="ledger.js"></script>
+    <script src="<SRC>"></script>
     <div>This window will autoclose shortly...</div>
     <script>
       function callback(event) {
@@ -20,7 +20,7 @@ var htmlStr = `
         }
       };
       Ledger.init({ callback: callback });
-      Ledger.sendPayment('<ADDR>',<AMT>,'');
+      Ledger.sendPayment('<ADDR>',<AMT>);
     </script>
   </body>
 </html>
@@ -28,12 +28,17 @@ var htmlStr = `
 
 func main() {
 
-	htmlStr = strings.Replace(htmlStr, "<ADDR>", "1FdawJAuUBMvEa4r4Dm3qNbBvUwZBiRy3Q", 1)
-	htmlStr = strings.Replace(htmlStr, "<AMT>", "0.666", 1)
+	ethHTMLStr := strings.Replace(htmlStr, "<SRC>", "ledger-eth.js", 1)
+	ethHTMLStr = strings.Replace(htmlStr, "<ADDR>", "0xa24a36176De28f64F90A61eD69B0d1b0fABCB768", 1)
+	ethHTMLStr = strings.Replace(htmlStr, "<AMT>", "0.666", 1)
+
+	//btcHTMLStr := strings.Replace(htmlStr, "<SRC>", "ledger.js", 1)
+	//btcHTMLStr = strings.Replace(htmlStr, "<ADDR>", "1FdawJAuUBMvEa4r4Dm3qNbBvUwZBiRy3Q", 1)
+	//btcHTMLStr = strings.Replace(htmlStr, "<AMT>", "0.666", 1)
 
 	tempPath := os.ExpandEnv("./temp.html")
 
-	htmlBytes := []byte(htmlStr)
+	htmlBytes := []byte(ethHTMLStr)
 	err := ioutil.WriteFile(tempPath, htmlBytes, 0644)
 	if err != nil {
 		log.Fatal(err)

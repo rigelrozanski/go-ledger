@@ -1,4 +1,4 @@
 *.swp
 *.html
-ledger.js
+*.js
 vendor
