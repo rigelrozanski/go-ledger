@@ -3,6 +3,7 @@ package main
 import (
 	"io/ioutil"
 	"log"
+	"os"
 	"os/exec"
 	"strings"
 )
@@ -30,17 +31,25 @@ func main() {
 	htmlStr = strings.Replace(htmlStr, "<ADDR>", "1FdawJAuUBMvEa4r4Dm3qNbBvUwZBiRy3Q", 1)
 	htmlStr = strings.Replace(htmlStr, "<AMT>", "0.666", 1)
 
+	tempPath := os.ExpandEnv("./temp.html")
+
 	htmlBytes := []byte(htmlStr)
-	err := ioutil.WriteFile("temp.html", htmlBytes, 0644)
+	err := ioutil.WriteFile(tempPath, htmlBytes, 0644)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	cmd := exec.Command("google-chrome", "temp.html")
+	cmd := exec.Command("google-chrome", tempPath)
 	//cmd.Stdin = strings.NewReader("some input")
 	//var out bytes.Buffer
 	//cmd.Stdout = &out
 	err = cmd.Run()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	//remove the temp file
+	err = os.Remove(tempPath)
 	if err != nil {
 		log.Fatal(err)
 	}
